@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Employee Management</title>
+  <style>
+    .success {
+      color: green;
+    }
+    .error {
+      color: red;
+    }
+    form{
+        width:700px;
+        height:400px;
+        background-color:skyblue;
+        border:1px solid black;
+    }
+    input{
+       background-color:white;
+    }
+    #text{
+        margin-top: 50px;
+    }
+  </style>
+</head>
+<body>
+    <h1>Employee Management</h1>
+
+  <h2>Add Employee</h2>
+  <form id="employeeForm">
+    <div id="text">
+    <label for="name">Name:</label>
+    <input type="text" id="name">
+
+    <label for="profession">Profession:</label>
+    <input type="text" id="profession">
+
+    <label for="age">Age:</label>
+    <input type="number" id="age" ></br><br>
+    </div>
+
+    <button type="submit">Add User</button>
+    <p id="msg" ></p>
+    <h2>Added Employees</h2>
+    <div id="employeeList"></div>
+  </form>
+
+ 
+
+  <script>
+    // Array to store added employees
+    let employees = [];
+
+    // Function to display employees in the employeeList div
+    function displayEmployees() {
+      const employeeListDiv = document.getElementById('employeeList');
+      employeeListDiv.innerHTML = '';
+       
+      employees.forEach((employee,index) => {
+        const employeeDiv = document.createElement('div');
+        employeeDiv.style.border="1px solid black";
+        employeeDiv.style.margin="5px";
+        employeeDiv.style.padding="5px";
+        employeeDiv.style.borderRadius="5px";
+        employeeDiv.style.width="200px";
+        employeeDiv.style.height="20px";
+       
+        employeeDiv.innerHTML = `<strong>${index+1}: ${employee.name}</strong> - ${employee.profession}, ${employee.age} years old`;
+        const deleteButton = document.createElement('button');
+        deleteButton.innerText = 'Delete';
+        deleteButton.style.borderRadius = "5px";
+        deleteButton.style.marginLeft = "220px";
+        deleteButton.style.width = "100px";
+        deleteButton.style.height = "20px";
+       
+       
+        
+        deleteButton.addEventListener('click', () => {
+          removeEmployee(employee.id);
+          employeeDiv.remove();
+        });
+        employeeDiv.appendChild(deleteButton);
+        employeeListDiv.appendChild(employeeDiv);
+      });
+    }
+
+    // Function to add an employee to the employees array
+    function addEmployee(name, profession, age) {
+      const id = employees.length + 1;
+      const employee = { id, name, profession, age };
+      employees.push(employee);
+      displayEmployees();
+    }
+
+    // Function to remove an employee from the employees array
+    function removeEmployee(id) {
+      employees = employees.filter((employee) => employee.id !== id);
+    }
+
+    // Event handler for form submission
+    const form = document.getElementById('employeeForm');
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const nameInput = document.getElementById('name');
+      const professionInput = document.getElementById('profession');
+      const ageInput = document.getElementById('age');
+      const message=document.getElementById("msg");
+
+      if (nameInput.value && professionInput.value && ageInput.value) {
+        addEmployee(nameInput.value, professionInput.value, ageInput.value);
+        nameInput.value = '';
+        professionInput.value = '';
+        ageInput.value = '';
+        nameInput.classList.remove('error');
+        professionInput.classList.remove('error');
+        ageInput.classList.remove('error');
+        nameInput.classList.add('success');
+        professionInput.classList.add('success');
+        ageInput.classList.add('success');
+        message.classList.add("success");
+        message.innerText="new employee is added successfully";
+
+      } else {
+        nameInput.classList.add('error');
+        professionInput.classList.add('error');
+        ageInput.classList.add('error');
+        message.classList.add("error");
+        message.innerText="All fields are required";
+      }
+    });
+  </script>
+    
+</body>
+</html>
